@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Valentine Surprise ❤️</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        background: #ffe6eb;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        margin-top: 100px;
+    }
+
+    .envelope {
+        font-size: 80px;
+        cursor: pointer;
+    }
+
+    h1 {
+        color: #d6336c;
+    }
+
+    button {
+        padding: 12px 20px;
+        font-size: 16px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+
+    #yesBtn {
+        background-color: #ff69b4;
+        color: white;
+    }
+
+    #noBtn {
+        background-color: #ccc;
+        position: absolute;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="container" id="envelopePage">
+    <div class="envelope" onclick="openCard()">✉️</div>
+    <p>Click the envelope 💌</p>
+</div>
+
+<div class="container" id="cardPage" style="display:none;">
+    <h1>💌 Happy Valentine’s Day 💌</h1>
+    <h2>Can you love me more? ❤️</h2>
+
+    <button id="yesBtn" onclick="sayYes()">Yes 😍</button>
+    <button id="noBtn" onmouseover="moveNo()">No 😒</button>
+</div>
+
+<script>
+function openCard() {
+    document.getElementById("envelopePage").style.display = "none";
+    document.getElementById("cardPage").style.display = "block";
+
+    // initial position of NO button
+    moveNo();
+}
+
+function sayYes() {
+    alert("Okay 🥰 Thank you! I love you too ❤️");
+}
+
+function moveNo() {
+    const noBtn = document.getElementById("noBtn");
+    const x = Math.random() * (window.innerWidth - 100);
+    const y = Math.random() * (window.innerHeight - 100);
+
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+}
+</script>
+
+</body>
+</html>
