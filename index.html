@@ -21,9 +21,22 @@ body {
 }
 
 .envelope {
-    font-size: 90px;
+    font-size: 70px;
     cursor: pointer;
-    color: #ff69b4;
+    background: #ff4d6d;   /* 🔴 envelope cover color */
+    color: white;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    transition: transform 0.2s ease;
+}
+
+.envelope:hover {
+    transform: scale(1.1);
 }
 
 h1 {
@@ -131,4 +144,5 @@ function blastConfetti() {
 
 </body>
 </html>
+
 
