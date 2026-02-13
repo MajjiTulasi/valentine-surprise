@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Valentine Surprise ❤️</title>
+
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    background: #ffe6eb;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.container {
+    text-align: center;
+}
+
+.envelope {
+    font-size: 90px;
+    cursor: pointer;
+}
+
+h1 {
+    color: #d6336c;
+}
+
+.buttons {
+    margin-top: 30px;
+    position: relative;
+}
+
+button {
+    padding: 12px 24px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    margin: 0 10px;
+}
+
+#yes {
+    background: #ff69b4;
+    color: white;
+}
+
+#no {
+    background: #cccccc;
+    position: relative;
+}
+
+/* Confetti */
+.confetti {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    background: red;
+    top: -10px;
+    animation: fall 3s linear forwards;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container" id="envelopePage">
+    <div class="envelope" onclick="openCard()">✉️</div>
+    <p>Click the envelope 💌</p>
+</div>
+
+<div class="container" id="cardPage" style="display:none;">
+    <h1>💌 Happy Valentine’s Day 💌</h1>
+    <h2>Can you love me more? ❤️</h2>
+
+    <div class="buttons">
+        <button id="yes" onclick="sayYes()">Yes 😍</button>
+        <button id="no" onmouseover="moveNo()">No 😒</button>
+    </div>
+</div>
+
+<div class="container" id="finalPage" style="display:none;">
+    <h1>🎉 Yay!!! 🎉</h1>
+    <h2>Thank you ❤️</h2>
+</div>
+
+<script>
+function openCard() {
+    document.getElementById("envelopePage").style.display = "none";
+    document.getElementById("cardPage").style.display = "block";
+}
+
+function moveNo() {
+    const noBtn = document.getElementById("no");
+    const x = Math.random() * 300 - 150;
+    const y = Math.random() * 150 - 75;
+    noBtn.style.transform = `translate(${x}px, ${y}px)`;
+}
+
+function sayYes() {
+    document.getElementById("cardPage").style.display = "none";
+    document.getElementById("finalPage").style.display = "block";
+    blastConfetti();
+}
+
+function blastConfetti() {
+    for (let i = 0; i < 80; i++) {
+        const confetti = document.createElement("div");
+        confetti.classList.add("confetti");
+        confetti.style.left = Math.random() * window.innerWidth + "px";
+        confetti.style.background =
+            ["#ff69b4", "#ff1493", "#ffd1dc", "#ff4d6d"][Math.floor(Math.random() * 4)];
+        confetti.style.animationDuration = (Math.random() * 2 + 2) + "s";
+        document.body.appendChild(confetti);
+
+        setTimeout(() => confetti.remove(), 3000);
+    }
+}
+</script>
+
+</body>
+</html>
