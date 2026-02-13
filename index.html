@@ -149,11 +149,13 @@ button {
 }
 
 .video-wrapper video {
-    width: 30%;
-    height: 500px;
+    width: 60%;
+    max-width: 500px;
+    height: auto;          /* 🔥 critical */
     border-radius: 20px;
     box-shadow: 0 15px 30px rgba(0,0,0,0.35);
 }
+
 
 /* 💌 Letter Pamphlet (fixed height + scroll) */
 .letter-card {
@@ -265,11 +267,12 @@ button {
     <h1>💖 Just for You 💖</h1>
 
     <div class="video-wrapper">
-        <video autoplay loop controls>
-            <source src="video.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-    </div>
+    <video controls playsinline muted>
+        <source src="video.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+</div>
+
 
     <br>
     <button onclick="goHome()">⬅ Back</button>
@@ -394,5 +397,6 @@ function setupNoButton() {
 
 </body>
 </html>
+
 
 
