@@ -15,33 +15,60 @@ body {
 
 .page {
     display: none;
-    padding-top: 60px;
 }
 
-.active {
+.page.active {
     display: block;
 }
 
+/* GIFs */
 .gif-container img {
     width: 180px;
+    height: 180px;
     margin: 15px;
     cursor: pointer;
     border-radius: 15px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-    transition: transform 0.2s;
+    box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+}
+/* Center everything on home page */
+.home-center {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;   /* heading on top, gifs below */
+    justify-content: center;  /* vertical center */
+    align-items: center;      /* horizontal center */
+    gap: 25px;                /* space between heading & gifs */
 }
 
-.gif-container img:hover {
-    transform: scale(1.05);
+/* GIF row */
+.gif-container {
+    display: flex;
+    gap: 30px;
 }
 
+/* GIF + text */
+.gif-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.gif-item p {
+    margin-top: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #d6336c;
+}
+
+
+/* Buttons */
 button {
     padding: 12px 20px;
     font-size: 16px;
     border-radius: 8px;
     border: none;
     cursor: pointer;
-    margin: 10px;
+    /* margin: 10px; */
 }
 
 #yes {
@@ -52,96 +79,317 @@ button {
 #no {
     background: #ccc;
     position: relative;
+    transition: left 0.2s ease, top 0.2s ease;
 }
 
-.photo {
-    width: 250px;
-    border-radius: 15px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+/* 🎉 Confetti */
+.confetti {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    top: -10px;
+    animation: fall 3s linear forwards;
+    z-index: 9999;
 }
+
+@keyframes fall {
+    to {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+/* Center Valentine page content */
+.valentine-center {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;   /* vertical center */
+    align-items: center;       /* horizontal center */
+    gap: 20px;
+}
+
+.buttons-area {
+    display: flex;
+    gap: 15px;                 /* space between YES & NO */
+}
+
+
+/* 💖 POPUP */
+.popup-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+}
+
+.popup-box {
+    background: white;
+    padding: 30px 40px;
+    border-radius: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    color: #d6336c;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    animation: pop 0.4s ease;
+}
+
+@keyframes pop {
+    from { transform: scale(0.5); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+/* 🎥 Video styling (centered & medium size) */
+.video-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.video-wrapper video {
+    width: 30%;
+    height: 500px;
+    border-radius: 20px;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.35);
+}
+
+/* 💌 Letter Pamphlet (fixed height + scroll) */
+.letter-card {
+    background: #fffaf3;
+    width: 90%;
+    max-width: 600px;
+
+    /* 👇 THIS IS THE IMPORTANT PART */
+    max-height: 90vh;          /* fits screen height */
+    overflow-y: auto;          /* scroll inside letter */
+
+    margin: 0 auto;
+    padding-left: 15px;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    text-align: left;
+    font-family: "Georgia", serif;
+    line-height: 1.8;
+    color: #4a2c2a;
+    position: relative;
+}
+
+/* subtle paper shine */
+.letter-card::before {
+    /* content: ""; */
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    background: linear-gradient(
+        135deg,
+        rgba(255,255,255,0.6),
+        rgba(255,255,255,0)
+    );
+    pointer-events: none;
+}
+
+.letter-card h2 {
+    text-align: center;
+    color: #d6336c;
+    margin-bottom: 5px;
+}
+
+.signature {
+    margin-bottom: 10px;
+    font-weight: bold;
+    text-align: left;
+}
+
+
 </style>
 </head>
 
 <body>
 
-<!-- 🎵 Background Music -->
-<audio id="bgMusic" loop>
-    <source src="song.mp3" type="audio/mpeg">
-</audio>
-
-<!-- 🏠 HOME PAGE -->
-<div class="page active" id="home">
-    <h1>💖 Choose a Surprise 💖</h1>
-    <div class="gif-container">
-        <img src="gif1.gif" onclick="openPage('valentine')">
-        <img src="gif2.gif" onclick="openPage('photo')">
-        <img src="gif3.gif" onclick="openPage('letter')">
+<!-- 💖 POPUP -->
+<div class="popup-overlay" id="yayPopup">
+    <div class="popup-box">
+        🎉 YAY! I LOVE YOU ❤️ 🎉
     </div>
 </div>
 
-<!-- 💘 VALENTINE QUESTION PAGE -->
-<div class="page" id="valentine">
-    <h1>Will you be my Valentine? ❤️</h1>
-    <button id="yes" onclick="sayYes()">Yes 😍</button>
-    <button id="no" onmouseover="moveNo()">No 😒</button>
-    <br>
-    <button onclick="goHome()">⬅ Back</button>
+<!-- 🏠 HOME -->
+<div class="page active" id="home">
+    <div class="home-center">
+    <h1>✨ Can you surprise? ✨</h1>
+
+    
+        <div class="gif-container">
+            <div class="gif-item">
+                <img src="gif1.gif" onclick="openPage('valentine')">
+                <p>Answer Carefully</p>
+            </div>
+
+            <div class="gif-item">
+                <img src="gif2.gif" onclick="openPage('photo')">
+                <p>A Moment Just for You</p>
+            </div>
+
+            <div class="gif-item">
+                <img src="gif3.gif" onclick="openPage('letter')">
+                <p>Words I Never Say Enough</p>
+            </div>
+        </div>
+    </div>
 </div>
 
-<!-- 📸 PHOTO + MUSIC PAGE -->
+
+</div>
+
+
+<!-- 💘 VALENTINE PAGE -->
+<div class="page" id="valentine">
+    <div class="valentine-center">
+        <h1>Will you be my Valentine? ❤️</h1>
+
+        <div class="buttons-area">
+            <button id="yes">Yes 😍</button>
+            <button id="no">No 😒</button>
+        </div>
+
+        <br>
+        <button onclick="goHome()">⬅ Back</button>
+    </div>
+</div>
+
+
+<!-- 📸 VIDEO PAGE -->
 <div class="page" id="photo">
     <h1>💖 Just for You 💖</h1>
 
-    <!-- YouTube Embed -->
-    <iframe width="360" height="215"
-        src="https://www.youtube.com/embed/qoq8B8ThgEM"
-        title="Tujh Mein Rab Dikhta Hai"
-        frameborder="0"
-        allow="autoplay; encrypted-media"
-        allowfullscreen>
-    </iframe>
+    <div class="video-wrapper">
+        <video autoplay loop controls>
+            <source src="C:\Users\hp\Downloads\video-output-D3DB069C-D7F5-457B-BA62-1AA97E2B19E7-1.MOV" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
 
-    <br><br>
+    <br>
     <button onclick="goHome()">⬅ Back</button>
 </div>
 
 <!-- 💌 LETTER PAGE -->
 <div class="page" id="letter">
     <h1>💌 Happy Valentine’s Day 💌</h1>
-    <p>
-        You make my days brighter and my heart happier.<br>
-        Thank you for being you ❤️
-    </p>
+
+    <div class="letter-card">
+        <h2>Dear Magnet ❤️,</h2>
+        <p>
+            Thank you for choosing me as your life partner. After marrying you, I’ve learned so much—especially how mature, patient, and understanding you are. There is truly no comparison for you in this world, and I’m deeply grateful to life for giving me you.
+        </p>
+        <p>
+            I once came across a line on Instagram that said,
+            <em>“Call me rich, because I have a loyal husband in this worst generation.”</em>
+            When I saw it, I honestly felt it was written just for me—
+            <em>aa line nakosame raasaaru anipinchindi</em>.
+        </p>
+
+        <p>
+            I don’t know if there really are seven lifetimes, but if there are,
+            I want you in every janma—always as my husband. Don’t feel like saying, “Oh no” 🤦‍♂️.
+        </p>
+
+        <p>
+            As a person, you are a rare character. You have strong ethics,you have so much patience,
+            you never judge people around you, and you carry yourself with
+            quiet strength. Kaira is incredibly lucky to have a father like you.
+            I know she loves you more than she loves me—and yes, I feel a little
+            jealous sometimes—but my heart is full seeing the bond you share.
+        </p>
+
+        <p>
+            Thank you for being the man you are and for loving me the way you do.
+            I am proud to be your wife.
+        </p>
+
+        <div class="signature">
+            YOUR WIFI ❤️
+        </div>
+    </div>
+
+    <br>
     <button onclick="goHome()">⬅ Back</button>
 </div>
+
 
 <script>
 function openPage(pageId) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById(pageId).classList.add('active');
 
-    if (pageId === 'photo') {
-        document.getElementById("bgMusic").play().catch(() => {});
-    } else {
-        document.getElementById("bgMusic").pause();
-    }
+    if (pageId === 'valentine') {
+    setupNoButton();
+}
+
 }
 
 function goHome() {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById('home').classList.add('active');
-    document.getElementById("bgMusic").pause();
 }
 
 function moveNo() {
-    const x = Math.random() * 300 - 150;
-    const y = Math.random() * 150 - 75;
-    no.style.transform = `translate(${x}px, ${y}px)`;
+    const noBtn = document.getElementById("no");
+    const maxX = 150;
+    const maxY = 100;
+    const x = (Math.random() * maxX * 2) - maxX;
+    const y = (Math.random() * maxY * 2) - maxY;
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
 }
 
+/* 💖 YES CLICK */
 function sayYes() {
-    alert("Yay! ❤️ Thank you!");
+    showPopup();
+    blastConfetti();
 }
+
+function showPopup() {
+    const popup = document.getElementById("yayPopup");
+    popup.style.display = "flex";
+    setTimeout(() => popup.style.display = "none", 3000);
+}
+
+/* 🎉 Confetti */
+function blastConfetti() {
+    for (let i = 0; i < 80; i++) {
+        const c = document.createElement("div");
+        c.className = "confetti";
+        c.style.left = Math.random() * window.innerWidth + "px";
+        c.style.background =
+            ["#ff69b4","#ff1493","#ffd1dc","#ff4d6d"]
+            [Math.floor(Math.random()*4)];
+        c.style.animationDuration = (Math.random()*2+2)+"s";
+        document.body.appendChild(c);
+        setTimeout(() => c.remove(), 3000);
+    }
+}
+
+function setupNoButton() {
+    const noBtn = document.getElementById("no");
+    const yesBtn = document.getElementById("yes");
+
+    // Reset NO position
+    noBtn.style.left = "0px";
+    noBtn.style.top = "0px";
+    noBtn.style.position = "relative";
+
+    // Remove old listeners (important)
+    noBtn.onmouseenter = null;
+    yesBtn.onclick = null;
+
+    // Attach events
+    noBtn.addEventListener("mouseenter", moveNo);
+    yesBtn.addEventListener("click", sayYes);
+}
+
 </script>
 
 </body>
