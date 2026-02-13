@@ -7,53 +7,41 @@
 <style>
 body {
     margin: 0;
-    height: 100vh;
     background: #ffe6eb;
     font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    text-align: center;
     overflow: hidden;
 }
 
-.container {
-    text-align: center;
+.page {
+    display: none;
+    padding-top: 60px;
 }
 
-.envelope {
-    font-size: 70px;
+.active {
+    display: block;
+}
+
+.gif-container img {
+    width: 180px;
+    margin: 15px;
     cursor: pointer;
-    color: #ff69b4;
-    width: 140px;
-    height: 140px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    transition: transform 0.2s ease;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    transition: transform 0.2s;
 }
 
-.envelope:hover {
-    transform: scale(1.1);
-}
-
-h1 {
-    color: #d6336c;
-}
-
-.buttons {
-    margin-top: 30px;
-    position: relative;
+.gif-container img:hover {
+    transform: scale(1.05);
 }
 
 button {
-    padding: 12px 24px;
+    padding: 12px 20px;
     font-size: 16px;
     border-radius: 8px;
     border: none;
     cursor: pointer;
-    margin: 0 10px;
+    margin: 10px;
 }
 
 #yes {
@@ -62,88 +50,99 @@ button {
 }
 
 #no {
-    background: #cccccc;
+    background: #ccc;
     position: relative;
 }
 
-/* Confetti */
-.confetti {
-    position: fixed;
-    width: 10px;
-    height: 10px;
-    background: red;
-    top: -10px;
-    animation: fall 3s linear forwards;
-}
-
-@keyframes fall {
-    to {
-        transform: translateY(110vh) rotate(360deg);
-        opacity: 0;
-    }
+.photo {
+    width: 250px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
 }
 </style>
 </head>
 
 <body>
 
-<div class="container" id="envelopePage">
-    <div class="envelope" onclick="openCard()">✉️</div>
-    <p>Click the envelope 💌</p>
-</div>
+<!-- 🎵 Background Music -->
+<audio id="bgMusic" loop>
+    <source src="song.mp3" type="audio/mpeg">
+</audio>
 
-<div class="container" id="cardPage" style="display:none;">
-    <h1>💌 Happy Valentine’s Day 💌</h1>
-    <h2>Will you be my Valentine? ❤️</h2>
-
-    <div class="buttons">
-        <button id="yes" onclick="sayYes()">Yes 😍</button>
-        <button id="no" onmouseover="moveNo()">No 😒</button>
+<!-- 🏠 HOME PAGE -->
+<div class="page active" id="home">
+    <h1>💖 Choose a Surprise 💖</h1>
+    <div class="gif-container">
+        <img src="gif1.gif" onclick="openPage('valentine')">
+        <img src="gif2.gif" onclick="openPage('photo')">
+        <img src="gif3.gif" onclick="openPage('letter')">
     </div>
 </div>
 
-<div class="container" id="finalPage" style="display:none;">
-    <h1>🎉 Yay!!! 🎉</h1>
-    <h2>I LOVE you ❤️</h2>
+<!-- 💘 VALENTINE QUESTION PAGE -->
+<div class="page" id="valentine">
+    <h1>Will you be my Valentine? ❤️</h1>
+    <button id="yes" onclick="sayYes()">Yes 😍</button>
+    <button id="no" onmouseover="moveNo()">No 😒</button>
+    <br>
+    <button onclick="goHome()">⬅ Back</button>
+</div>
+
+<!-- 📸 PHOTO + MUSIC PAGE -->
+<div class="page" id="photo">
+    <h1>💖 Just for You 💖</h1>
+
+    <!-- YouTube Embed -->
+    <iframe width="360" height="215"
+        src="https://www.youtube.com/embed/qoq8B8ThgEM"
+        title="Tujh Mein Rab Dikhta Hai"
+        frameborder="0"
+        allow="autoplay; encrypted-media"
+        allowfullscreen>
+    </iframe>
+
+    <br><br>
+    <button onclick="goHome()">⬅ Back</button>
+</div>
+
+<!-- 💌 LETTER PAGE -->
+<div class="page" id="letter">
+    <h1>💌 Happy Valentine’s Day 💌</h1>
+    <p>
+        You make my days brighter and my heart happier.<br>
+        Thank you for being you ❤️
+    </p>
+    <button onclick="goHome()">⬅ Back</button>
 </div>
 
 <script>
-function openCard() {
-    document.getElementById("envelopePage").style.display = "none";
-    document.getElementById("cardPage").style.display = "block";
+function openPage(pageId) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(pageId).classList.add('active');
+
+    if (pageId === 'photo') {
+        document.getElementById("bgMusic").play().catch(() => {});
+    } else {
+        document.getElementById("bgMusic").pause();
+    }
+}
+
+function goHome() {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('home').classList.add('active');
+    document.getElementById("bgMusic").pause();
 }
 
 function moveNo() {
-    const noBtn = document.getElementById("no");
     const x = Math.random() * 300 - 150;
     const y = Math.random() * 150 - 75;
-    noBtn.style.transform = `translate(${x}px, ${y}px)`;
+    no.style.transform = `translate(${x}px, ${y}px)`;
 }
 
 function sayYes() {
-    document.getElementById("cardPage").style.display = "none";
-    document.getElementById("finalPage").style.display = "block";
-    blastConfetti();
-}
-
-function blastConfetti() {
-    for (let i = 0; i < 80; i++) {
-        const confetti = document.createElement("div");
-        confetti.classList.add("confetti");
-        confetti.style.left = Math.random() * window.innerWidth + "px";
-        confetti.style.background =
-            ["#ff69b4", "#ff1493", "#ffd1dc", "#ff4d6d"][Math.floor(Math.random() * 4)];
-        confetti.style.animationDuration = (Math.random() * 2 + 2) + "s";
-        document.body.appendChild(confetti);
-
-        setTimeout(() => confetti.remove(), 3000);
-    }
+    alert("Yay! ❤️ Thank you!");
 }
 </script>
 
 </body>
 </html>
-
-
-
-
